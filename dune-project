@@ -2,7 +2,7 @@
 
 (using melange 0.1)
 
-(name melange-opam-template)
+(name score-it)
 
 (license "MIT")
 
@@ -16,6 +16,6 @@
 
 (package
  (allow_empty)
- (name melange-opam-template)
- (synopsis "Melange project")
+ (name score-it)
+ (synopsis "Score It")
  (description "Minimal melange project"))
