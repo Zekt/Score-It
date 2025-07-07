@@ -1,50 +1,8 @@
 module App = {
-  let style =
-    ReactDOM.Style.make(~fontSize="1.5em", ~display="flex", ~gap="0.5em", ());
-
-  type note = {x: int, y: int};
-
-  let sheetStyle =
-    ReactDOM.Style.make(~border="1px solid black", ~width="500px", ~height="300px", ~position="relative", ());
-
-  let noteStyle =
-    ReactDOM.Style.make(~width="10px", ~height="10px", ~backgroundColor="black", ~borderRadius="50%", ~position="absolute", ());
-
   [@react.component]
-  let make = () => {
-
-    let (notes, setNotes) = React.useState(() => []);
-    let handleClick = (event: React.Event.Mouse.t) => {
-      open Webapi.Dom;
-      let bodyMargin = (ReactDOM.querySelector("body"));
-      let (bodyTop, bodyLeft) = switch (bodyMargin) {
-        | Some(e) => {
-            let computedStyle = Window.getComputedStyle(e, window);
-            let topMargin = CssStyleDeclaration.marginTop(computedStyle);
-            let leftMargin = CssStyleDeclaration.marginLeft(computedStyle);
-            let top = int_of_string(List.hd(String.split_on_char('p', topMargin)));
-            let left = int_of_string(List.hd(String.split_on_char('p', leftMargin)));
-            (top, left)
-          }
-        | None => (0, 0)
-      };
-      // let rect = switch (bodyMargin) {
-      //   | Some(e) => Element.getBoundingClientRect(e);
-      //   | None => DomRect.make(~width=0., ~height=0., ~x=0., ~y=0.,)
-      // }
-      let x = React.Event.Mouse.pageX(event) - bodyLeft;
-      let y = React.Event.Mouse.pageY(event) - bodyTop;
-      setNotes(notes => [ {x, y}, ...notes]);
-    };
-
-    <div style=sheetStyle onClick=handleClick>
-      {notes
-       |> List.map(note =>
-            <div
-              key={string_of_int(note.x) ++ "_" ++ string_of_int(note.y)}
-              style={ReactDOM.Style.combine(noteStyle, ReactDOM.Style.make(~left=string_of_int(note.x) ++ "px", ~top=string_of_int(note.y) ++ "px", ()))} />)
-       |> Array.of_list
-       |> React.array}
+  let make = (~children) => {
+    <div>
+      children
     </div>;
   };
   // [@react.component]
@@ -72,5 +30,8 @@ let () =
     Js.Console.error("Failed to start React: couldn't find the #root element")
   | Some(element) =>
     let root = ReactDOM.Client.createRoot(element);
-    ReactDOM.Client.render(root, <App />);
+    ReactDOM.Client.render(root,
+      <App>
+        <Sheet.Sheet nMeasures={4} /> 
+      </App>);
   };
