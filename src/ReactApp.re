@@ -14,12 +14,27 @@ module App = {
   let make = () => {
 
     let (notes, setNotes) = React.useState(() => []);
-    let handleClick = _ => {
-    //   let rect = ReactDOM.Dom.getBoundingClientRect(event.target);
-    //   let x = event.clientX - rect.left;
-    //   let y = event.clientY - rect.top;
-    //   setNotes([...notes, {x, y}]);
-      setNotes(notes => notes @ [{x: 0, y: 0}]);
+    let handleClick = (event: React.Event.Mouse.t) => {
+      open Webapi.Dom;
+      let bodyMargin = (ReactDOM.querySelector("body"));
+      let (bodyTop, bodyLeft) = switch (bodyMargin) {
+        | Some(e) => {
+            let computedStyle = Window.getComputedStyle(e, window);
+            let topMargin = CssStyleDeclaration.marginTop(computedStyle);
+            let leftMargin = CssStyleDeclaration.marginLeft(computedStyle);
+            let top = int_of_string(List.hd(String.split_on_char('p', topMargin)));
+            let left = int_of_string(List.hd(String.split_on_char('p', leftMargin)));
+            (top, left)
+          }
+        | None => (0, 0)
+      };
+      // let rect = switch (bodyMargin) {
+      //   | Some(e) => Element.getBoundingClientRect(e);
+      //   | None => DomRect.make(~width=0., ~height=0., ~x=0., ~y=0.,)
+      // }
+      let x = React.Event.Mouse.pageX(event) - bodyLeft;
+      let y = React.Event.Mouse.pageY(event) - bodyTop;
+      setNotes(notes => [ {x, y}, ...notes]);
     };
 
     <div style=sheetStyle onClick=handleClick>
