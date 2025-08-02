@@ -24,6 +24,15 @@ module App = {
   //   </div>;
 };
 
+let testConstants: Sheet.constants = {
+  songName: "testSong",
+  timestamp: (4, 4),
+  nLines: 6,
+  measuresPerLine: 4,
+  resolution: 96
+}
+
+
 let () =
   switch (ReactDOM.querySelector("#root")) {
   | None =>
@@ -32,6 +41,6 @@ let () =
     let root = ReactDOM.Client.createRoot(element);
     ReactDOM.Client.render(root,
       <App>
-        <Sheet.Sheet nMeasures={4} /> 
+        <Sheet.Sheet constants=testConstants /> 
       </App>);
   };
