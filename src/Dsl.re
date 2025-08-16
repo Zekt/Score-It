@@ -1,12 +1,7 @@
-// LCM of duration, time signature, etc.
+// LCM of all durations, time signature, etc.
 let measureResolution = 288
 
-type duration =
-  Sixteenth
-| Eighth
-| Quarter
-| Half
-| Whole
+type duration = Sixteenth | Eighth | Quarter | Half | Whole
 
 type pitch = C4 | D4 | E4 | F4 | G4 | A4 | B4 | Rest | Sustain
 	
@@ -19,7 +14,7 @@ type noteInfo = {
 // All time signatures share a same number of minimal units of measureResolution
 type measureSig = FourFour | ThreeFour
 
-// Any measure must has total note length added up to measureResolution
+// Any measure must have total notes length added up to measureResolution
 type measure = {
  	timeSig: measureSig,
     notes: list(noteInfo)
@@ -46,4 +41,10 @@ let durationToUnit = (d: duration) => (s: measureSig): int => {
 		}
 	}
 	}
+}
+
+let calcMeasure = (m: measure): int => {
+	List.fold_left((i, n) => {
+		i + durationToUnit(n.duration, m.timeSig);
+	}, 0, m.notes);
 }

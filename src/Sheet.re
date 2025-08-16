@@ -9,38 +9,7 @@ type constants = {
 	resolution: int        // A common denominator between possible durations
 };
 
-
-// type step = 
-//   | Step(int) // 0 to 11, representing the 12 semitones in an octave, can go over or under
-//   | Rest;
-// 
-// type note = Note(step, int); // Note with a step and length
-// | Sixteenth(step)
-// | Eighth(step)
-// | Quarter(step)
-// | Half(step)
-// | Whole(step)
-// 
-// type measure = {
-//     notes: list((note, int)), // List of notes with their positions in the measure, 
-//     resolutionn: int // Resolution of the measure, e.g., 16 for sixteenth notes
-// };
-
 type note = {x: int, y: int};
-
-type duration =
-Sixteenth
-| Eighth
-| Quarter
-| Half
-| Whole
-
-// Position of note is represented by the total length between the start of measure and itself
-type noteInfo = {
-	measure: int,
-	duration: duration,
-	pos: list(duration)
-}
 
 //--- Styles
 let noteStyle =
